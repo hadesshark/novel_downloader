@@ -5,7 +5,7 @@ import json
 import sys
 
 import unittest
-from downloader import *
+import downloader
 
 
 class TestResponse(unittest.TestCase):
