@@ -1,0 +1,5 @@
+lxml (3.7.3)
+pip (9.0.1)
+requests (2.13.0)
+setuptools (28.8.0)
+wheel (0.29.0)
