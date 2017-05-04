@@ -12,8 +12,12 @@ import unittest
 class TestResponse(unittest.TestCase):
 
     # 把想要抓取的小說，給於基本資料
+
     def setUp(self):
-        self.response = downloader.response
+        self.response = downloader.Response(downloader.url)
+
+    def test_status_code(self):
+        self.assertEqual(self.response.status_code(), 200)
 
 
     # 傳送請求，存取小說在指定的位置
@@ -24,9 +28,6 @@ class TestResponse(unittest.TestCase):
 
 
         # 把獲得的小說內容存在指定的位置
-
-    def test_status_code(self):
-        self.assertEqual(self.response.status_code, 200)
 
 
 if __name__ == '__main__':
