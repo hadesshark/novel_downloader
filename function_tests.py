@@ -20,8 +20,15 @@ class TestResponse(unittest.TestCase):
         self.assertEqual(self.response.status_code(), 200)
 
 
-    # 傳送請求，存取小說在指定的位置
-        # 傳送請求，獲得需要的小說
+"""
+    傳送請求，存取小說在指定的位置
+        傳送請求，獲得需要的小說
+"""
+        # 抓取下一頁 url
+
+
+        # 抓取文章
+
 
 
         # 內容需要修改的部分進行處理
