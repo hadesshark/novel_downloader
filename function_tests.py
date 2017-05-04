@@ -8,6 +8,8 @@ import sys
 import downloader
 import unittest
 
+from bs4 import BeautifulSoup
+
 
 class TestResponse(unittest.TestCase):
 

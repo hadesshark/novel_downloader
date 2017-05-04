@@ -7,6 +7,8 @@ import sys
 import unittest
 import downloader
 
+from bs4 import BeautifulSoup
+
 
 class TestResponse(unittest.TestCase):
 

@@ -4,6 +4,8 @@ from lxml import etree
 import json
 import sys
 
+from bs4 import BeautifulSoup
+
 
 url = "https://ck101.com/thread-3845788-1-1.html"
 
@@ -18,3 +20,10 @@ class Response(object):
 
     def status_code(self):
         return self.response.status_code
+
+    def text(self):
+        return self.response.text
+
+
+soup = BeautifulSoup(Response(url).text().encode('utf-8'), 'html.parser')
+print(soup)
