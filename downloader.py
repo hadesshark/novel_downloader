@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import requests
 from bs4 import BeautifulSoup
-
-
-url = "https://ck101.com/thread-3845788-1-1.html"
+import re
+import sys
 
 def get_web_page(url):
     headers = {
@@ -12,13 +11,43 @@ def get_web_page(url):
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        return response.text
+        return BeautifulSoup(response.text, 'html5lib')
     else:
         return None
 
+def get_page_novel(url):
+    soup = get_web_page(url)
+    content = ''
+
+    for temp_content in soup.find_all('td', {'id': re.compile('postmessage_')}):
+        content += temp_content.text + '\n\n'
+
+    return content
+
+def get_next_url(url):
+    soup = get_web_page(url)
+    if soup:
+        try:
+            next_url = soup.find('a', {'class': 'nxt'})['href']
+        except:
+            next_url = None
+        return next_url
+
+def total_novel(url):
+    total_content = get_page_novel(url)
+    temp_url = get_next_url(url)
+    while temp_url:
+        sys.stdout.write("\rurl: {0}".format(temp_url))
+        total_content += get_page_novel(temp_url)
+        temp_url = get_next_url(temp_url)
+
+    return total_content
 
 def main():
-    soup = get_web_page(url)
+    url = "https://ck101.com/thread-3814619-1-1.html"
+
+    with open('temp.txt', 'w', encoding='utf-8') as f:
+        f.write(total_novel(url))
 
 
 if __name__ == '__main__':

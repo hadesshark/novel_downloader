@@ -1,6 +1,8 @@
 # venv folder
 env_folder
 .idea
+temp.txt
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
