@@ -25,5 +25,4 @@ class Response(object):
         return self.response.text
 
 
-soup = BeautifulSoup(Response(url).text().encode('utf-8'), 'html.parser')
-print(soup)
+soup = BeautifulSoup(Response(url).text(), 'html.parser')

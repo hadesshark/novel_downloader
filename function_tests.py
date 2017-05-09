@@ -4,22 +4,15 @@ from lxml import etree
 import json
 import sys
 
-
 import downloader
-import unittest
 
 from bs4 import BeautifulSoup
 
+import re
 
-class TestResponse(unittest.TestCase):
+# 把想要抓取的小說，給於基本資料
+print(downloader.soup.find('h1', {'id': re.compile('thread')}).text)
 
-    # 把想要抓取的小說，給於基本資料
-
-    def setUp(self):
-        self.response = downloader.Response(downloader.url)
-
-    def test_status_code(self):
-        self.assertEqual(self.response.status_code(), 200)
 
 
 """
@@ -37,7 +30,3 @@ class TestResponse(unittest.TestCase):
 
 
         # 把獲得的小說內容存在指定的位置
-
-
-if __name__ == '__main__':
-    unittest.main()
