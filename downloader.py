@@ -25,4 +25,4 @@ class Response(object):
         return self.response.text
 
 
-soup = BeautifulSoup(Response(url).text(), 'html.parser')
+soup = BeautifulSoup(Response(url).text(), 'html5lib')
