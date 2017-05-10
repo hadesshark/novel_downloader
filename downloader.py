@@ -12,7 +12,7 @@ def get_web_page(url):
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        return BeautifulSoup(response.text, 'html5lib')
+        return BeautifulSoup(response.text, 'lxml')
     else:
         return None
 
@@ -33,12 +33,11 @@ def get_page_novel(url):
 
 def get_next_url(url):
     soup = get_web_page(url)
-    if soup:
-        try:
-            next_url = soup.find('a', {'class': 'nxt'})['href']
-        except:
-            next_url = None
-        return next_url
+    try:
+        next_url = soup.find('a', {'class': 'nxt'})['href']
+    except:
+        next_url = None
+    return next_url
 
 def total_novel(url):
     total_content = get_page_novel(url)
@@ -50,7 +49,6 @@ def total_novel(url):
         temp_url = get_next_url(temp_url)
         t_end = time.time()
         print("sec: {0}".format(t_end - t_start))
-
 
     return total_content
 
