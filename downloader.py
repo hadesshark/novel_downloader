@@ -10,6 +10,8 @@ import json
 old_url = ''
 flag = 0
 
+system = {'lxml', 'bs4'}
+
 def get_web_page(url):
     headers = {
         'User-Agent':
@@ -47,15 +49,13 @@ def get_page_novel_lxml(url):
         content += item + '\n\n'
     return content
 
-def get_next_url(url):
-    if flag:
-        etree_page = get_web_page(url)
-    else:
-        soup = get_web_page(url)
+def get_next_url(url):        
     try:
         if flag:
+            etree_page = get_web_page(url)
             next_url = etree_page.xpath(u"//div[@class='pg']/a[@class='nxt']/@href")[0]
         else:
+            soup = get_web_page(url)
             next_url = soup.find('a', {'class': 'nxt'})['href']
     except:
         next_url = None
