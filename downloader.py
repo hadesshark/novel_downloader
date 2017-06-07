@@ -8,7 +8,7 @@ from lxml import etree
 import json
 
 old_url = ''
-flag = 1
+flag = 0
 
 def get_web_page(url):
     headers = {
@@ -17,21 +17,10 @@ def get_web_page(url):
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        return BeautifulSoup(response.text, 'lxml')
-    else:
-        return None
-
-def get_web_page_lxml(url):
-    headers = {
-        'User-Agent':
-        'Mozilla/5.0 (Windows NT 6.1) Chrome/44.0.2403.157 Safari/537.36'
-    }
-    headers['Referer'] = old_url
-    global old_url
-    old_url = url
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return etree.HTML(response.text.encode('utf-8'))
+        if flag:
+            return etree.HTML(response.text.encode('utf-8'))
+        else:
+            return BeautifulSoup(response.text, 'lxml')
     else:
         return None
 
@@ -51,37 +40,23 @@ def get_page_novel(url):
     return content
 
 def get_page_novel_lxml(url):
-    # xpath_content =  u"//td[@class='t_f']"
-    # etree_page = get_web_page_lxml(url).xpath(xpath_content)
-    #
-    # content = ''
-    # for item in etree_page:
-    #     for item_del in item.xpath(u"//i[@class='pstatus']"):
-    #         item_del.getparent().remove(item_del)
-    # for item in etree_page:
-    #     for temp_content in item.xpath(u"//td[@class='t_f']//text()"):
-    #         content += temp_content
-
     xpath_content = u"//td[@class='t_f']//text()"
-    etree_page = get_web_page_lxml(url).xpath(xpath_content)
+    etree_page = get_web_page(url).xpath(xpath_content)
     content = ''
     for item in etree_page:
         content += item + '\n\n'
-    # time.sleep(5)
     return content
 
 def get_next_url(url):
-    soup = get_web_page(url)
+    if flag:
+        etree_page = get_web_page(url)
+    else:
+        soup = get_web_page(url)
     try:
-        next_url = soup.find('a', {'class': 'nxt'})['href']
-    except:
-        next_url = None
-    return next_url
-
-def get_next_url_lxml(url):
-    etree_page = get_web_page_lxml(url)
-    try:
-        next_url = etree_page.xpath(u"//div[@class='pg']/a[@class='nxt']/@href")[0]
+        if flag:
+            next_url = etree_page.xpath(u"//div[@class='pg']/a[@class='nxt']/@href")[0]
+        else:
+            next_url = soup.find('a', {'class': 'nxt'})['href']
     except:
         next_url = None
     return next_url
@@ -91,20 +66,20 @@ def total_novel(url):
     old_url = url
     if flag:
         total_content = get_page_novel_lxml(url)
-        temp_url = get_next_url_lxml(url)
     else:
-        total_content = get_page_novel_lxml(url)
-        temp_url = get_next_url_lxml(url)
+        total_content = get_page_novel(url)
+
+    temp_url = get_next_url(url)
 
     while temp_url:
         t_start = time.time()
         sys.stdout.write("\rurl: {0}".format(temp_url))
         if flag:
             total_content += get_page_novel_lxml(temp_url)
-            temp_url = get_next_url_lxml(temp_url)
         else:
             total_content += get_page_novel(temp_url)
-            temp_url = get_next_url(temp_url)
+
+        temp_url = get_next_url(temp_url)
         t_end = time.time()
         print("sec: {0}".format(t_end - t_start))
     return total_content
