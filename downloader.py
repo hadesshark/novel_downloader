@@ -5,6 +5,7 @@ import re
 import sys
 import time
 from lxml import etree
+import json
 
 def get_web_page(url):
     headers = {
@@ -105,12 +106,10 @@ def total_novel_lxml(url):
     return total_content
 
 def main():
-    url = "https://ck101.com/thread-3814619-1-1.html"
+    with open("setting.json", encoding="utf-8") as json_file:
+        json_data = json.load(json_file)[0]
 
-    # with open('temp.txt', 'w', encoding='utf-8') as f:
-    #     f.write(total_novel(url))
-
-    with open('temp.txt', 'w', encoding='utf-8') as f:
+    with open(title_name + '.txt', 'w', encoding='utf-8') as f:
         f.write(total_novel_lxml(url))
 
 
