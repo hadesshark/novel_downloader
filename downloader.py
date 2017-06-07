@@ -7,6 +7,8 @@ import time
 from lxml import etree
 import json
 
+old_url = ''
+
 def get_web_page(url):
     headers = {
         'User-Agent':
@@ -23,6 +25,9 @@ def get_web_page_lxml(url):
         'User-Agent':
         'Mozilla/5.0 (Windows NT 6.1) Chrome/44.0.2403.157 Safari/537.36'
     }
+    headers['Referer'] = old_url
+    global old_url
+    old_url = url
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         return etree.HTML(response.text.encode('utf-8'))
@@ -61,7 +66,7 @@ def get_page_novel_lxml(url):
     content = ''
     for item in etree_page:
         content += item + '\n\n'
-
+    # time.sleep(5)
     return content
 
 def get_next_url(url):
@@ -94,8 +99,11 @@ def total_novel(url):
     return total_content
 
 def total_novel_lxml(url):
+    global old_url
+    old_url = url
     total_content = get_page_novel_lxml(url)
     temp_url = get_next_url_lxml(url)
+
     while temp_url:
         t_start = time.time()
         sys.stdout.write("\rurl: {0}".format(temp_url))
@@ -109,8 +117,13 @@ def main():
     with open("setting.json", encoding="utf-8") as json_file:
         json_data = json.load(json_file)[0]
 
+    print(json_data)
+
+    url = json_data.get('url')
+    title_name = json_data.get('title')
+
     with open(title_name + '.txt', 'w', encoding='utf-8') as f:
-        f.write(total_novel_lxml(url))
+        f.write(total_novel(url))
 
 
 if __name__ == '__main__':
