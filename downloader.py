@@ -8,6 +8,7 @@ from lxml import etree
 import json
 
 old_url = ''
+flag = 1
 
 def get_web_page(url):
     headers = {
@@ -86,29 +87,24 @@ def get_next_url_lxml(url):
     return next_url
 
 def total_novel(url):
-    total_content = get_page_novel(url)
-    temp_url = get_next_url(url)
-    while temp_url:
-        t_start = time.time()
-        sys.stdout.write("\rurl: {0}".format(temp_url))
-        total_content += get_page_novel(temp_url)
-        temp_url = get_next_url(temp_url)
-        t_end = time.time()
-        print("sec: {0}".format(t_end - t_start))
-
-    return total_content
-
-def total_novel_lxml(url):
     global old_url
     old_url = url
-    total_content = get_page_novel_lxml(url)
-    temp_url = get_next_url_lxml(url)
+    if flag:
+        total_content = get_page_novel_lxml(url)
+        temp_url = get_next_url_lxml(url)
+    else:
+        total_content = get_page_novel_lxml(url)
+        temp_url = get_next_url_lxml(url)
 
     while temp_url:
         t_start = time.time()
         sys.stdout.write("\rurl: {0}".format(temp_url))
-        total_content += get_page_novel_lxml(temp_url)
-        temp_url = get_next_url_lxml(temp_url)
+        if flag:
+            total_content += get_page_novel_lxml(temp_url)
+            temp_url = get_next_url_lxml(temp_url)
+        else:
+            total_content += get_page_novel(temp_url)
+            temp_url = get_next_url(temp_url)
         t_end = time.time()
         print("sec: {0}".format(t_end - t_start))
     return total_content
