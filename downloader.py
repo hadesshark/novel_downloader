@@ -17,7 +17,7 @@ def get_web_page(url):
     else:
         return None
 
-def get_page_novel(url):
+def get_page_chapters(url):
     xpath_content = u"//td[@class='t_f']//text()"
     etree_page = get_web_page(url).xpath(xpath_content)
     content = ''
@@ -44,14 +44,14 @@ def get_next_url(url):
 
 def total_novel(url):
 
-    total_content = get_page_novel(url)
+    total_content = get_page_chapters(url)
 
     temp_url = get_next_url(url)
 
     while temp_url:
         sys.stdout.write("\rpage: {0}".format(temp_url.split('-')[-2]))
 
-        total_content += get_page_novel(temp_url)
+        total_content += get_page_chapters(temp_url)
         temp_url = get_next_url(temp_url)
 
     return total_content
