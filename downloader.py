@@ -8,7 +8,7 @@ from lxml import etree
 import json
 
 old_url = ''
-flag = 0
+flag = 1
 
 def get_web_page(url):
     headers = {
@@ -47,6 +47,14 @@ def get_page_novel_lxml(url):
     for item in etree_page:
         content += item + '\n\n'
     return content
+
+# 全部頁數
+def get_all_page_num(url):
+    xpath_all_num = u"//div[@class='pg']/a[@class='last']//text()"
+    etree_page = get_web_page(url)
+    all_num = etree_page.xpath(xpath_all_num)[0]
+
+    print(all_num.split(' ')[-1])
 
 def get_next_url(url):
     try:
