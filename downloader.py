@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import requests
-from bs4 import BeautifulSoup
 import re
 import sys
 import time
@@ -8,7 +7,6 @@ from lxml import etree
 import json
 
 old_url = ''
-flag = 1
 
 def get_web_page(url):
     headers = {
@@ -17,28 +15,9 @@ def get_web_page(url):
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-
-        if flag:
-            return etree.HTML(response.text.encode('utf-8'))
-        else:
-            return BeautifulSoup(response.text, 'lxml')
+        return etree.HTML(response.text.encode('utf-8'))
     else:
         return None
-
-def del_i_label(dom):
-    if dom.i:
-        dom.i.decompose()
-    return dom
-
-def get_page_novel(url):
-    soup = get_web_page(url)
-    content = ''
-
-    for temp_content in soup.find_all('td', {'id': re.compile('postmessage_')}):
-        temp_content = del_i_label(temp_content)
-        content += temp_content.text + '\n\n'
-
-    return content
 
 def get_page_novel_lxml(url):
     xpath_content = u"//td[@class='t_f']//text()"
@@ -58,12 +37,8 @@ def get_all_page_num(url):
 
 def get_next_url(url):
     try:
-        if flag:
-            etree_page = get_web_page(url)
-            next_url = etree_page.xpath(u"//div[@class='pg']/a[@class='nxt']/@href")[0]
-        else:
-            soup = get_web_page(url)
-            next_url = soup.find('a', {'class': 'nxt'})['href']
+        etree_page = get_web_page(url)
+        next_url = etree_page.xpath(u"//div[@class='pg']/a[@class='nxt']/@href")[0]
     except:
         next_url = None
     return next_url
@@ -71,20 +46,16 @@ def get_next_url(url):
 def total_novel(url):
     global old_url
     old_url = url
-    if flag:
-        total_content = get_page_novel_lxml(url)
-    else:
-        total_content = get_page_novel(url)
+
+    total_content = get_page_novel_lxml(url)
 
     temp_url = get_next_url(url)
 
     while temp_url:
         t_start = time.time()
         sys.stdout.write("\rurl: {0}".format(temp_url))
-        if flag:
-            total_content += get_page_novel_lxml(temp_url)
-        else:
-            total_content += get_page_novel(temp_url)
+
+        total_content += get_page_novel_lxml(temp_url)
 
         temp_url = get_next_url(temp_url)
         t_end = time.time()
