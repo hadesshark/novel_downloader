@@ -12,6 +12,35 @@ flag = 0
 
 system = {'lxml', 'bs4'}
 
+
+class Novel(object):
+
+    def get_web_page(self):
+        pass
+
+    def get_page_chapters(self):
+        # form get_web_page use some way to get chapters
+        pass
+
+    def get_next_url(self):
+        # form get_web_page to get next url
+        pass
+
+    def __init__(self):
+        with open("setting.json", encoding="utf-8") as json_file:
+            json_data = json.load(json_file)[0]
+
+        self.url = json_data.get('url')
+        self.title = json_data.get('title')
+
+
+
+def etree_way():
+    return etree.HTML(response.text.encode('utf-8'))
+
+def bsf_way():
+    return BeautifulSoup(response.text, 'lxml')
+
 def get_web_page(url):
     headers = {
         'User-Agent':
@@ -20,9 +49,9 @@ def get_web_page(url):
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         if flag:
-            return etree.HTML(response.text.encode('utf-8'))
+            etree_way()
         else:
-            return BeautifulSoup(response.text, 'lxml')
+            bsf_way()
     else:
         return None
 
@@ -49,7 +78,7 @@ def get_page_novel_lxml(url):
         content += item + '\n\n'
     return content
 
-def get_next_url(url):        
+def get_next_url(url):
     try:
         if flag:
             etree_page = get_web_page(url)
