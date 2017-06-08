@@ -10,31 +10,6 @@ import json
 old_url = ''
 flag = 0
 
-system = {'lxml', 'bs4'}
-
-
-class Novel(object):
-
-    def get_web_page(self):
-        pass
-
-    def get_page_chapters(self):
-        # form get_web_page use some way to get chapters
-        pass
-
-    def get_next_url(self):
-        # form get_web_page to get next url
-        pass
-
-    def __init__(self):
-        with open("setting.json", encoding="utf-8") as json_file:
-            json_data = json.load(json_file)[0]
-
-        self.url = json_data.get('url')
-        self.title = json_data.get('title')
-
-
-
 def etree_way():
     return etree.HTML(response.text.encode('utf-8'))
 
@@ -48,6 +23,7 @@ def get_web_page(url):
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
+
         if flag:
             etree_way()
         else:
