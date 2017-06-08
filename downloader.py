@@ -10,12 +10,6 @@ import json
 old_url = ''
 flag = 0
 
-def etree_way():
-    return etree.HTML(response.text.encode('utf-8'))
-
-def bsf_way():
-    return BeautifulSoup(response.text, 'lxml')
-
 def get_web_page(url):
     headers = {
         'User-Agent':
@@ -25,9 +19,9 @@ def get_web_page(url):
     if response.status_code == 200:
 
         if flag:
-            etree_way()
+            return etree.HTML(response.text.encode('utf-8'))
         else:
-            bsf_way()
+            return BeautifulSoup(response.text, 'lxml')
     else:
         return None
 
@@ -86,7 +80,7 @@ def total_novel(url):
 
         temp_url = get_next_url(temp_url)
         t_end = time.time()
-        print("sec: {0}".format(t_end - t_start))
+        print(" sec: {0}".format(t_end - t_start))
     return total_content
 
 def main():
