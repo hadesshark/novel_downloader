@@ -6,8 +6,6 @@ import time
 from lxml import etree
 import json
 
-old_url = ''
-
 def get_web_page(url):
     headers = {
         'User-Agent':
@@ -19,7 +17,7 @@ def get_web_page(url):
     else:
         return None
 
-def get_page_novel_lxml(url):
+def get_page_novel(url):
     xpath_content = u"//td[@class='t_f']//text()"
     etree_page = get_web_page(url).xpath(xpath_content)
     content = ''
@@ -37,36 +35,32 @@ def get_all_page_num(url):
 
 def get_next_url(url):
     try:
+        xpath_next_url = u"//div[@class='pg']/a[@class='nxt']/@href"
         etree_page = get_web_page(url)
-        next_url = etree_page.xpath(u"//div[@class='pg']/a[@class='nxt']/@href")[0]
+        next_url = etree_page.xpath(xpath_next_url)[0]
     except:
         next_url = None
     return next_url
 
 def total_novel(url):
-    global old_url
-    old_url = url
 
-    total_content = get_page_novel_lxml(url)
+    total_content = get_page_novel(url)
 
     temp_url = get_next_url(url)
 
     while temp_url:
-        t_start = time.time()
-        sys.stdout.write("\rurl: {0}".format(temp_url))
+        sys.stdout.write("\rpage: {0}".format(temp_url.split('-')[-2]))
 
-        total_content += get_page_novel_lxml(temp_url)
-
+        total_content += get_page_novel(temp_url)
         temp_url = get_next_url(temp_url)
-        t_end = time.time()
-        print(" sec: {0}".format(t_end - t_start))
+
     return total_content
 
 def main():
     with open("setting.json", encoding="utf-8") as json_file:
         json_data = json.load(json_file)[0]
 
-    print(json_data)
+    print(json_data.get('title'))
 
     url = json_data.get('url')
     title_name = json_data.get('title')
