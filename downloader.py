@@ -45,19 +45,6 @@ def get_next_url(url):
 def show_download_info(url):
     sys.stdout.write("\rurl: {0}".format(url))
 
-def total_novel(url):
-
-    total_content = get_page_chapters(url)
-    temp_url = get_next_url(url)
-
-    while temp_url:
-        show_download_info(temp_url)
-
-        total_content += get_page_chapters(temp_url)
-        temp_url = get_next_url(temp_url)
-
-    return total_content
-
 class SettingInfo(object):
     def __init__(self):
         with open("setting.json", encoding="utf-8") as json_file:
@@ -75,21 +62,40 @@ class SettingInfo(object):
     def show_title(self):
         print(self.title)
 
+class Chapter(object):
+    def __init__(self, url):
+        self.url = url
+
+    def collect(self):
+        total_content = get_page_chapters(self.url)
+        temp_url = get_next_url(self.url)
+
+        while temp_url:
+            show_download_info(temp_url)
+
+            total_content += get_page_chapters(temp_url)
+            temp_url = get_next_url(temp_url)
+
+        return total_content
+
 
 class Novel(object):
     def __init__(self):
-        pass
+        self.info = SettingInfo()
+        self.url = self.info.get_url()
+        self.title = self.info.get_title()
 
     def save(self):
-        novel_info = SettingInfo()
-        novel_info.show_title()
-        novel_url = novel_info.get_url()
-        novel_title = novel_info.get_title()
-        with open(novel_title + '.txt', 'w', encoding='utf-8') as f:
-            f.write(total_novel(novel_url))
+        with open(self.title + '.txt', 'w', encoding='utf-8') as f:
+            f.write(Chapter(self.url).collect())
+
+    def show_title(self):
+        self.info.show_title()
 
 def main():
-    Novel().save()
+    novel = Novel()
+    novel.show_title()
+    novel.save()
 
 
 if __name__ == '__main__':
