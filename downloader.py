@@ -62,21 +62,35 @@ class SettingInfo(object):
     def show_title(self):
         print(self.title)
 
+
+class downloader(object):
+
+    def have_next_url(self, url):
+        try:
+            xpath_next_url = u"//div[@class='pg']/a[@class='nxt']/@href"
+            etree_page = get_web_page(url)
+            next_url = etree_page.xpath(xpath_next_url)[0]
+        except:
+            next_url = None
+        return next_url
+
 class Chapter(object):
     def __init__(self, url):
         self.url = url
+        self.content = get_page_chapters(self.url)
+        self.set_url()
 
     def collect(self):
-        total_content = get_page_chapters(self.url)
-        temp_url = get_next_url(self.url)
+        while self.url:
+            show_download_info(self.url)
 
-        while temp_url:
-            show_download_info(temp_url)
+            self.content += get_page_chapters(self.url)
+            self.set_url()
 
-            total_content += get_page_chapters(temp_url)
-            temp_url = get_next_url(temp_url)
+        return self.content
 
-        return total_content
+    def set_url(self):
+        self.url = get_next_url(self.url)
 
 
 class Novel(object):
