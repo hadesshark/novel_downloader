@@ -75,7 +75,7 @@ class downloader(object):
 
 
 class Chapter(object):
-    def __init__(self, url):
+    def __init__(self, url=SettingInfo().get_url()):
         self.url = url
         self.content = ''
 
@@ -97,24 +97,10 @@ class Novel(object):
 
     def save(self):
         with open(self.title + '.txt', 'w', encoding='utf-8') as f:
-            f.write(Chapter(self.url).collect())
+            f.write(Chapter().collect())
 
     def show_title(self):
         self.info.show_title()
-
-    class Chapter(object):
-        def __init__(self, url):
-            self.url = url
-            self.content = ''
-
-        def collect(self):
-            while self.url:
-                show_download_info(self.url)
-
-                self.content += downloader().get_page_chapters(self.url)
-                self.url = get_next_url(self.url)
-
-            return self.content
 
 def main():
     novel = Novel()
