@@ -72,21 +72,24 @@ class SettingInfo(object):
     def get_title(self):
         return self.title
 
-def main():
-    # with open("setting.json", encoding="utf-8") as json_file:
-    #     json_data = json.load(json_file)[0]
-    #
-    # print(json_data.get('title'))
-    #
-    # url = json_data.get('url')
-    # title_name = json_data.get('title')
-    novel_info = SettingInfo()
-    print(novel_info.get_title())
-    novel_url = novel_info.get_url()
-    novel_title = novel_info.get_title()
+    def show_title(self):
+        print(self.title)
 
-    with open(novel_title + '.txt', 'w', encoding='utf-8') as f:
-        f.write(total_novel(novel_url))
+
+class Novel(object):
+    def __init__(self):
+        pass
+
+    def save(self):
+        novel_info = SettingInfo()
+        novel_info.show_title()
+        novel_url = novel_info.get_url()
+        novel_title = novel_info.get_title()
+        with open(novel_title + '.txt', 'w', encoding='utf-8') as f:
+            f.write(total_novel(novel_url))
+
+def main():
+    Novel().save()
 
 
 if __name__ == '__main__':
