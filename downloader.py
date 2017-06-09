@@ -32,8 +32,9 @@ class Downloader(object):
         'Mozilla/5.0 (Windows NT 6.1) Chrome/44.0.2403.157 Safari/537.36'
     }
 
-    def __init__(self, url):
+    def __init__(self, url=SettingInfo().get_url()):
         self.url = url
+        self.content = ''
 
     def chapter_list(self):
         return self.page_analysis(self.__xpath_content)
@@ -61,21 +62,13 @@ class Downloader(object):
     def show_now_url(self):
         sys.stdout.write("\rurl: {0}".format(self.url))
 
-
-class Chapter(object):
-    def __init__(self, url=SettingInfo().get_url()):
-        self.url = url
-        self.content = ''
-
-    def collect(self):
+    def all_chapter(self):
         while self.have_url():
-            downloader = Downloader(self.url)
-            downloader.show_now_url()
+            self.show_now_url()
 
-            for item in downloader.chapter_list():
-                self.content += item + '\n\n'
+            self.list_to_string()
 
-            self.set_url(downloader.get_next_url())
+            self.set_url(self.get_next_url())
 
         return self.content
 
@@ -84,6 +77,15 @@ class Chapter(object):
 
     def set_url(self, url):
         self.url = url
+
+    def list_to_string(self):
+        self.content += ''.join(self.chapter_list()) + '\n\n'
+
+
+class Chapter(object):
+
+    def collect(self):
+        return Downloader().all_chapter()
 
 
 class Novel(object):
@@ -100,10 +102,7 @@ class Novel(object):
 
 def main():
     """
-    novel save
-    -> chpater collect
-    -> downloader chapter list
-
+    novel save -> chapter(string) collect -> from downloader(list) get page
     """
     novel = Novel()
     novel.show_title()
