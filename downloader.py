@@ -64,32 +64,29 @@ class SettingInfo(object):
 
 
 class downloader(object):
+    __xpath_content = u"//td[@class='t_f']//text()"
 
     def get_page_chapters(self, url):
-        xpath_content = u"//td[@class='t_f']//text()"
-        etree_page = get_web_page(url).xpath(xpath_content)
+        etree_page = get_web_page(url).xpath(self.__xpath_content)
         content = ''
         for item in etree_page:
             content += item + '\n\n'
         return content
 
+
 class Chapter(object):
     def __init__(self, url):
         self.url = url
-        self.content = downloader().get_page_chapters(self.url)
-        self.set_url()
+        self.content = ''
 
     def collect(self):
         while self.url:
             show_download_info(self.url)
 
             self.content += downloader().get_page_chapters(self.url)
-            self.set_url()
+            self.url = get_next_url(self.url)
 
         return self.content
-
-    def set_url(self):
-        self.url = get_next_url(self.url)
 
 
 class Novel(object):
@@ -104,6 +101,20 @@ class Novel(object):
 
     def show_title(self):
         self.info.show_title()
+
+    class Chapter(object):
+        def __init__(self, url):
+            self.url = url
+            self.content = ''
+
+        def collect(self):
+            while self.url:
+                show_download_info(self.url)
+
+                self.content += downloader().get_page_chapters(self.url)
+                self.url = get_next_url(self.url)
+
+            return self.content
 
 def main():
     novel = Novel()
