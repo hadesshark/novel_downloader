@@ -65,7 +65,7 @@ class SettingInfo(object):
 
 class downloader(object):
 
-    def get_page_chapters(self.url):
+    def get_page_chapters(self, url):
         xpath_content = u"//td[@class='t_f']//text()"
         etree_page = get_web_page(url).xpath(xpath_content)
         content = ''
