@@ -42,31 +42,51 @@ def get_next_url(url):
         next_url = None
     return next_url
 
+def show_download_info(url):
+    sys.stdout.write("\rurl: {0}".format(url))
+
 def total_novel(url):
 
     total_content = get_page_chapters(url)
-
     temp_url = get_next_url(url)
 
     while temp_url:
-        sys.stdout.write("\rpage: {0}".format(temp_url.split('-')[-2]))
+        show_download_info(temp_url)
 
         total_content += get_page_chapters(temp_url)
         temp_url = get_next_url(temp_url)
 
     return total_content
 
+class SettingInfo(object):
+    def __init__(self):
+        with open("setting.json", encoding="utf-8") as json_file:
+            self.json_data = json.load(json_file)[0]
+
+        self.url = self.json_data.get('url')
+        self.title = self.json_data.get('title')
+
+    def get_url(self):
+        return self.url
+
+    def get_title(self):
+        return self.title
+
 def main():
-    with open("setting.json", encoding="utf-8") as json_file:
-        json_data = json.load(json_file)[0]
+    # with open("setting.json", encoding="utf-8") as json_file:
+    #     json_data = json.load(json_file)[0]
+    #
+    # print(json_data.get('title'))
+    #
+    # url = json_data.get('url')
+    # title_name = json_data.get('title')
+    novel_info = SettingInfo()
+    print(novel_info.get_title())
+    novel_url = novel_info.get_url()
+    novel_title = novel_info.get_title()
 
-    print(json_data.get('title'))
-
-    url = json_data.get('url')
-    title_name = json_data.get('title')
-
-    with open(title_name + '.txt', 'w', encoding='utf-8') as f:
-        f.write(total_novel(url))
+    with open(novel_title + '.txt', 'w', encoding='utf-8') as f:
+        f.write(total_novel(novel_url))
 
 
 if __name__ == '__main__':
