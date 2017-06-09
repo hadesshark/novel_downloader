@@ -33,15 +33,6 @@ def get_all_page_num(url):
 
     print(all_num.split(' ')[-1])
 
-def get_next_url(url):
-    try:
-        xpath_next_url = u"//div[@class='pg']/a[@class='nxt']/@href"
-        etree_page = get_web_page(url)
-        next_url = etree_page.xpath(xpath_next_url)[0]
-    except:
-        next_url = None
-    return next_url
-
 def show_download_info(url):
     sys.stdout.write("\rurl: {0}".format(url))
 
@@ -65,13 +56,17 @@ class SettingInfo(object):
 
 class downloader(object):
     __xpath_content = u"//td[@class='t_f']//text()"
+    __xpath_next_url = u"//div[@class='pg']/a[@class='nxt']/@href"
 
-    def get_page_chapters(self, url):
-        etree_page = get_web_page(url).xpath(self.__xpath_content)
-        content = ''
-        for item in etree_page:
-            content += item + '\n\n'
-        return content
+    def chapter_list(self, url):
+        return get_web_page(url).xpath(self.__xpath_content)
+
+    def get_next_url(self, url):
+        try:
+            etree_page = get_web_page(url)
+            return etree_page.xpath(self.__xpath_next_url)[0]
+        except:
+            return None
 
 
 class Chapter(object):
@@ -83,16 +78,19 @@ class Chapter(object):
         while self.url:
             show_download_info(self.url)
 
-            self.content += downloader().get_page_chapters(self.url)
-            self.url = get_next_url(self.url)
+            self.get_page_chapters()
+            self.url = downloader().get_next_url(self.url)
 
         return self.content
+
+    def get_page_chapters(self):
+        for item in downloader().chapter_list(self.url):
+            self.content += item + '\n\n'
 
 
 class Novel(object):
     def __init__(self):
         self.info = SettingInfo()
-        self.url = self.info.get_url()
         self.title = self.info.get_title()
 
     def save(self):
