@@ -36,28 +36,28 @@ class Downloader(object):
         self.url = url
         self.content = ''
 
-    def chapter_list(self):
-        return self.page_analysis(self.__xpath_content)
-
-    def get_next_url(self):
-        try:
-            return self.page_analysis(self.__xpath_next_url)[0]
-        except:
-            return None
-
-    def get_all_page_num(self):
-        all_num = self.page_analysis(self.__xpath_all_num)[0]
-        print(all_num)
-
-    def page_analysis(self, path):
-        return self.get_web_page().xpath(path)
-
     def get_web_page(self):
         response = requests.get(self.url, headers=self.__headers)
         if response.status_code == 200:
             return etree.HTML(response.text.encode('utf-8'))
         else:
             return None
+
+    def download_analysis(self, path):
+        return self.get_web_page().xpath(path)
+
+    def get_next_url(self):
+        try:
+            return self.download_analysis(self.__xpath_next_url)[0]
+        except:
+            return None
+
+    def get_all_page_num(self):
+        all_num = self.download_analysis(self.__xpath_all_num)[0]
+        print(all_num)
+
+    def chapter_list(self):
+        return self.download_analysis(self.__xpath_content)
 
     def show_now_url(self):
         sys.stdout.write("\rurl: {0}".format(self.url))
@@ -66,7 +66,7 @@ class Downloader(object):
         while self.have_url():
             self.show_now_url()
 
-            self.list_to_string()
+            self.chpater_list_convert_string()
 
             self.set_url(self.get_next_url())
 
@@ -78,7 +78,7 @@ class Downloader(object):
     def set_url(self, url):
         self.url = url
 
-    def list_to_string(self):
+    def chpater_list_convert_string(self):
         self.content += ''.join(self.chapter_list()) + '\n\n'
 
 
@@ -89,12 +89,14 @@ class Chapter(object):
 
 
 class Novel(object):
+    file_address = r"./txt_file//"
     def __init__(self):
         self.info = SettingInfo()
         self.title = self.info.get_title()
 
     def save(self):
-        with open(self.title + '.txt', 'w', encoding='utf-8') as f:
+        save_name = self.file_address + self.title + '.txt'
+        with open(save_name, 'w', encoding='utf-8') as f:
             f.write(Chapter().collect())
 
     def show_title(self):
