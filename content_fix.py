@@ -20,7 +20,7 @@ class Content(object):
 
         self.json_file = JsonFile()
         self.finish_version = self.txt_space + self.json_file.__str__()
-        self.file_name = self.json_file.json_data
+        self.file_name = self.json_file.__str__()
 
         self.content = "".encode('utf-8')
 
@@ -48,19 +48,21 @@ class Content(object):
                 self.content += item
         file.close()
 
+    def show_file_use_size(self, first, second):
+        shutil.copy(first, second)
+        show_information(self.file_name, self.finish_version)
+
     def update(self):
         self.txt_space_fix()
 
-        shutil.copy(self.finish_version, self.before_update)
-        show_information(self.file_name, self.finish_version)
+        self.show_file_use_size(self.finish_version, self.before_update)
 
         self.check()
 
         with open(self.after_update, "wb") as file:
             file.write(self.content)
 
-        shutil.copy(self.after_update, self.finish_version)
-        show_information(self.file_name, self.finish_version)
+        self.show_file_use_size(self.after_update, self.finish_version)
 
 
 def main():
