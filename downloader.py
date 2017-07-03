@@ -3,24 +3,16 @@ import requests
 import re
 import sys
 from lxml import etree
-import json
 
-class SettingInfo(object):
-    def __init__(self):
-        with open("setting.json", encoding="utf-8") as json_file:
-            self.json_data = json.load(json_file)[0]
+from initialize import JsonFile as JsonFile
 
-        self.url = self.json_data.get('url')
-        self.title = self.json_data.get('title')
 
-    def get_url(self):
-        return self.url
-
-    def get_title(self):
-        return self.title
-
+class SettingInfo(JsonFile):
     def show_title(self):
-        print(self.title)
+        print(self.get_title())
+
+    def show_title_author(self):
+        print(self.__str__())
 
 
 class Downloader(object):
@@ -93,21 +85,25 @@ class Novel(object):
     def __init__(self):
         self.info = SettingInfo()
         self.title = self.info.get_title()
+        self.author = self.info.get_author()
 
     def save(self):
-        save_name = self.file_address + self.title + '.txt'
+        save_name = self.file_address + self.info.__str__()
         with open(save_name, 'w', encoding='utf-8') as f:
             f.write(Chapter().collect())
 
     def show_title(self):
         self.info.show_title()
 
+    def show_title_author(self):
+        self.info.show_title_author()
+
 def main():
     """
     novel save -> chapter(string) collect -> from downloader(list) get page
     """
     novel = Novel()
-    novel.show_title()
+    novel.show_title_author()
     novel.save()
 
 if __name__ == '__main__':
