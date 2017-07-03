@@ -21,13 +21,14 @@ class JsonFile(object):
 
 
 def show_information(file_name, system_name):
-    return ("{0} size: {1}".format(
-    file_name, os.path.getsize(system_name)))
+    print("{0} size: {1}".format(file_name, os.path.getsize(system_name)))
 
 
 def main():
 
     txt_space = r"./txt_file//"
+    if os.path.exists(txt_space):
+        os.mkdir(txt_space)
 
     if os.path.isfile(txt_space + "temp.txt"):
         os.remove(txt_space + "temp.txt")
@@ -37,8 +38,7 @@ def main():
 
     json_file = JsonFile()
     shutil.copy(txt_space + json_file.title, txt_space + "temp.txt")
-    #show_information(json_file.json_data, txt_space + json_file.title)
-    print(show_information(json_file.json_data, txt_space + json_file.title))
+    show_information(json_file.json_data, txt_space + json_file.title)
 
     file = open(txt_space + "temp.txt", "rb")
     # file.seek
@@ -62,8 +62,7 @@ def main():
         file.write(content)
 
     shutil.copy(txt_space + "temp2.txt", txt_space + json_file.title)
-    # show_information(json_file.json_data, txt_space + json_file.title)
-    print(show_information(json_file.json_data, txt_space + json_file.title))
+    show_information(json_file.json_data, txt_space + json_file.title)
 
 
 if __name__ == '__main__':
