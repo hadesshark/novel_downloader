@@ -40,8 +40,8 @@ def main():
     shutil.copy(txt_space + json_file.title, txt_space + "temp.txt")
     show_information(json_file.json_data, txt_space + json_file.title)
 
+
     file = open(txt_space + "temp.txt", "rb")
-    # file.seek
 
     content = "".encode('utf-8')
     for item in tqdm(file.readlines()):
@@ -51,9 +51,6 @@ def main():
             continue
         elif "本帖最後由".encode('utf-8') in item:
             continue
-        # 某些技術性空格無法處理
-        # elif "\r\n".encode('utf-8') in item:
-        #     continue
         else:
             content += item
     file.close()
