@@ -3,7 +3,6 @@ import requests
 import re
 import sys
 from lxml import etree
-import json
 
 from initialize import JsonFile as JsonFile
 
