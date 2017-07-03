@@ -44,6 +44,8 @@ class Content(object):
                 continue
             elif "本帖最後由".encode('utf-8') in item:
                 continue
+            # elif len(item) <= 3:
+            #     continue
             else:
                 self.content += item
         file.close()
