@@ -22,6 +22,9 @@ class SettingInfo(object):
     def show_title(self):
         print(self.title)
 
+    def get_author(self):
+        return self.json_data.get('author')
+
 
 class Downloader(object):
     __xpath_content = u"//td[@class='t_f']//text()"
@@ -93,9 +96,10 @@ class Novel(object):
     def __init__(self):
         self.info = SettingInfo()
         self.title = self.info.get_title()
+        self.author = self.info.get_author()
 
     def save(self):
-        save_name = self.file_address + self.title + '.txt'
+        save_name = self.file_address + self.title + ' 作者：' + self.author +'.txt'
         with open(save_name, 'w', encoding='utf-8') as f:
             f.write(Chapter().collect())
 
