@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
+from tqdm import *
 
 from initialize import JsonFile
 from downloader import Downloader
@@ -46,17 +47,17 @@ class Downloader(Downloader):
 class SimpleToTW(Content):
 
     def check(self):
-        file = open(self.before_update, "rb")
+        file = open(self.before_update, "r")
 
         opencc = OpenCC('s2tw')
-        for item in file.readlines():
-            self.content += opencc.convert(item)
+        for item in tqdm(file.readlines()):
+            self.content += opencc.convert(item).encode('utf-8')
 
         file.close()
 
 
 def main():
-    # Downloader().get_web_page()
+    Downloader().get_web_page()
     SimpleToTW().update()
 
 if __name__ == '__main__':
