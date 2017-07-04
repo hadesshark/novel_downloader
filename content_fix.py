@@ -61,10 +61,13 @@ class Content(object):
 
         self.check()
 
-        with open(self.after_update, "wb") as file:
-            file.write(self.content)
+        self.update_save()
 
         self.show_file_use_size(self.after_update, self.finish_version)
+
+    def update_save(self):
+        with open(self.after_update, "wb") as file:
+            file.write(self.content)
 
 
 def main():
