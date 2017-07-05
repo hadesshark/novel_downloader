@@ -43,3 +43,32 @@ with open('temp.txt', 'w', encoding='utf-8') as f:
 #
 # with open("test2.txt", mode='w') as file:
 #     file.write(content)
+
+
+"""
+from opencc import OpenCC
+from downloader import Novel 
+
+def convert(string=""):
+    return OpenCC('s2tw').convert(string)
+
+Content(object):
+
+    def __init__(self):
+        self.file = open("test.txt", mode='r')
+        self.content = ''
+
+    def update(self):
+        for item in self.file.readlines():
+            self.content += convert(item)
+
+
+class Novel(Novel):
+
+    def save(self):
+        with open("test2.txt", mode='w') as file:
+            file.write(Content().update())
+
+Novel().save()
+
+"""
