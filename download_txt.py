@@ -4,7 +4,7 @@ import requests
 from tqdm import *
 
 from initialize import JsonFile
-from downloader import Downloader
+from downloader import Downloader, Novel
 from opencc import OpenCC
 from content_fix import Content
 
@@ -14,18 +14,8 @@ class Downloader(Downloader):
     def get_web_page(self):
         response = requests.get(self.url)
         response.encoding = 'gb18030'
-        self.json_file = JsonFile()
 
-        self.set_title()
-
-        self.txt_space = r"./txt_file//"
-
-        with open(self.txt_space + self.json_file.__str__(), mode="w", encoding="utf-8") as file:
-            file.write(response.text)
-
-    def set_title(self):
-        self.json_file.set_title(OpenCC('s2tw').convert(self.json_file.get_title()))
-
+        return response.text
 
 class SimpleToTW(Content):
 
@@ -39,8 +29,19 @@ class SimpleToTW(Content):
         file.close()
 
 
+class Novel(Novel):
+    def save(self):
+        self.set_title(OpenCC('s2tw').convert(self.info.get_title()))
+
+        with open(self.save_name_and_address(), mode="w", encoding="utf-8") as file:
+            file.write(Downloader().get_web_page())
+
+    def set_title(self, title=''):
+        self.info.set_title(title)
+
+
 def main():
-    Downloader().get_web_page()
+    Novel().save()
     SimpleToTW().update()
 
 if __name__ == '__main__':

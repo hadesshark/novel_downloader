@@ -88,8 +88,7 @@ class Novel(object):
         self.author = self.info.get_author()
 
     def save(self):
-        save_name = self.file_address + self.info.__str__()
-        with open(save_name, 'w', encoding='utf-8') as f:
+        with open(self.save_name_and_address(), 'w', encoding='utf-8') as f:
             f.write(Chapter().collect())
 
     def show_title(self):
@@ -97,6 +96,9 @@ class Novel(object):
 
     def show_title_author(self):
         self.info.show_title_author()
+
+    def save_name_and_address(self):
+        return self.file_address + self.info.__str__()
 
 def main():
     """

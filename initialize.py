@@ -36,5 +36,6 @@ class JsonFile(object):
         return [{'title': self.title, 'url': self.url, 'author': self.author}]
 
     def __del__(self):
-        with open("setting.json", mode="w", encoding="utf-8") as json_file:
-            json.dump(self.data(), json_file)
+        if self.title != self.json_data.get('title'):
+            with open("setting.json", mode="w", encoding="utf-8") as json_file:
+                json.dump(self.data(), json_file)
