@@ -74,15 +74,10 @@ class Downloader(object):
         self.content += ''.join(self.chapter_list()) + '\n\n'
 
 
-class Chapter(object):
-
-    def collect(self):
-        return Downloader().all_chapter()
-
 class Content(object):
 
     def collect(self):
-        return Chapter().collect()
+        return Downloader().all_chapter()
 
 
 class Novel(object):
