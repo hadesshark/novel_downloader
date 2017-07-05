@@ -24,15 +24,20 @@ class Content(object):
 
         self.content = "".encode('utf-8')
 
+    def folder_remove(self, file_name=''):
+        if os.path.isfile(file_name):
+            os.remove(file_name)
+
+    def folder_make(self, file_name=''):
+        if not(os.path.exists(file_name)):
+            os.mkdir(file_name)
+
     def txt_space_fix(self):
-        if not(os.path.exists(self.txt_space)):
-            os.mkdir(self.txt_space)
+        self.folder_make(self.txt_space)
 
-        if os.path.isfile(self.before_update):
-            os.remove(self.before_update)
+        self.folder_remove(self.before_update)
+        self.folder_remove(self.after_update)
 
-        if os.path.isfile(self.after_update):
-            os.remove(self.after_update)
 
     def check(self):
         file = open(self.before_update, "rb")
