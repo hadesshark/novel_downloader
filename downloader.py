@@ -79,6 +79,11 @@ class Chapter(object):
     def collect(self):
         return Downloader().all_chapter()
 
+class Content(object):
+
+    def collect(self):
+        return Chapter().collect()
+
 
 class Novel(object):
     file_address = r"./txt_file//"
@@ -86,10 +91,11 @@ class Novel(object):
         self.info = SettingInfo()
         self.title = self.info.get_title()
         self.author = self.info.get_author()
+        self.content = Content().collect()
 
     def save(self):
         with open(self.save_name_and_address(), 'w', encoding='utf-8') as f:
-            f.write(Chapter().collect())
+            f.write(self.content)
 
     def show_title(self):
         self.info.show_title()
