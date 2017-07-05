@@ -20,7 +20,7 @@ class Downloader(Downloader):
 
         self.txt_space = r"./txt_file//"
 
-        with open(self.txt_space + self.json_file.__str__(), mode="w") as file:
+        with open(self.txt_space + self.json_file.__str__(), mode="w", encoding="utf-8") as file:
             file.write(response.text)
 
     def set_title(self):
@@ -30,7 +30,7 @@ class Downloader(Downloader):
 class SimpleToTW(Content):
 
     def check(self):
-        file = open(self.before_update, "r")
+        file = open(self.before_update, "r", encoding="utf-8")
 
         opencc = OpenCC('s2tw')
         for item in tqdm(file.readlines()):
