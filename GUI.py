@@ -23,8 +23,8 @@ def reset_author():
 
 
 class NovelForm(FlaskForm):
-    name = StringField('Title: ' + reset_name())
-    author = StringField('author: ' + reset_author())
+    name = StringField('Title: ')
+    author = StringField('author: ')
     submit = SubmitField('download')
 
 def novel_download():
@@ -47,8 +47,13 @@ def index():
     if request.method == 'POST':
         novel_download()
         content_fix()
+
     form = NovelForm()
-    return render_template('index.html', form=form)
+
+    jsonfile = JsonFile()
+    name = jsonfile.get_title()
+    author = jsonfile.get_author()
+    return render_template('index.html', form=form, name=name, author=author)
 
 
 def json_setting(name, author, url):
@@ -65,15 +70,15 @@ def setting():
 
     form = SettingForm()
     if form.validate_on_submit():
-        print("yessssss")
         name = form.name.data
         author = form.author.data
         url = form.url.data
 
-        json_setting(name, author, url)
+        print(name)
+        print(author)
+        print(url)
 
-    else:
-        print("nooooo")
+        json_setting(name, author, url)
 
     return render_template('setting.html', form=form, name=name, author=author, url=url)
 

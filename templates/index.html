@@ -7,9 +7,9 @@
 <div class="page-header">
     <h1>下載器</h1>
 </div>
-<form method="POST">
-  {{ form.name.label }}</br>
-  {{ form.author.label }}</br>
+<form method="POST" action="/">
+  {{ form.name.label }}<h2>{% if name %}{{ name }}{% endif %}</h2></br>
+  {{ form.author.label }}<h2>{% if name %}{{ author }}{% endif %}</h2></br>
   <!-- 提供額外視覺上的重量和識別一組按鈕中主要的操作項目 -->
   <button type="submit" class="btn btn-primary">Download</button>
 </form>
