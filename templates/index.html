@@ -5,12 +5,13 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
+    <h1>下載器</h1>
 </div>
 <form method="POST">
-  {{ form.hidden_tag() }}
   {{ form.name.label }}</br>
-  {{ form.submit() }}
+  {{ form.author.label }}</br>
+  <!-- 提供額外視覺上的重量和識別一組按鈕中主要的操作項目 -->
+  <button type="submit" class="btn btn-primary">Download</button>
 </form>
 
 {% endblock %}

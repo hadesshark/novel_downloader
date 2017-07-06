@@ -20,6 +20,9 @@ class JsonFile(object):
     def get_url(self):
         return self.url
 
+    def set_url(self, url=''):
+        self.url = url
+
     def get_author(self):
         return self.author
 
