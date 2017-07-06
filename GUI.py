@@ -23,10 +23,11 @@ def novel_download():
     Novel().save()
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
+    if request.method == 'POST':
+        novel_download()
     form = NovelForm()
-    Novel().save()
     return render_template('index.html', form=form)
 
 if __name__ == '__main__':
