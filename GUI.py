@@ -7,6 +7,7 @@ from wtforms.validators import Required
 
 from downloader import Novel
 from initialize import JsonFile
+from content_fix import Content
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
@@ -23,10 +24,16 @@ def novel_download():
     Novel().save()
 
 
+@app.route('/content_fix')
+def content_fix():
+    Content().update()
+
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
         novel_download()
+        content_fix()
     form = NovelForm()
     return render_template('index.html', form=form)
 
