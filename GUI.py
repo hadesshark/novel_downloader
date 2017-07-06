@@ -19,12 +19,10 @@ class NovelForm(FlaskForm):
     name = StringField('file name: ' + JsonFile().__str__())
     submit = SubmitField('download')
 
-@app.route('/novel_download')
 def novel_download():
     Novel().save()
 
 
-@app.route('/content_fix')
 def content_fix():
     Content().update()
 
