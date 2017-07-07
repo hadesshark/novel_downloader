@@ -7,12 +7,11 @@ Usage:
 
 from setuptools import setup
 
-APP = ['GUI.py']
-DATA_FILES = ['setting.json', 'content_fix.py', 'downloader.py', 'initialize.py']
+APP = ['test_flask_py2app.py']
+DATA_FILES = []
 OPTIONS = {
     'argv_emulation': True,
     'packages': ['flask', 'flask_bootstrap', 'flask_wtf', 'flask_script', 'lxml', 'requests', 'jinja2', 'wtforms'],
-    'resources': ['./templates', './static', './opencc']
 }
 
 setup(
