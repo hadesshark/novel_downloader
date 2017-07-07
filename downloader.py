@@ -82,8 +82,8 @@ class Content(object):
 
 class Novel(object):
     file_address = r"./txt_file//"
-    def __init__(self):
-        self.info = SettingInfo()
+    def __init__(self, base_setting=SettingInfo()):
+        self.info = base_setting
         self.title = self.info.get_title()
         self.author = self.info.get_author()
         self.content = Content().collect()
@@ -101,13 +101,13 @@ class Novel(object):
     def save_name_and_address(self):
         return self.file_address + self.info.__str__()
 
-def main():
-    """
-    novel save -> chapter(string) collect -> from downloader(list) get page
-    """
-    novel = Novel()
-    novel.show_title_author()
-    novel.save()
-
-if __name__ == '__main__':
-    main()
+# def main():
+#     """
+#     novel save -> chapter(string) collect -> from downloader(list) get page
+#     """
+#     novel = Novel()
+#     novel.show_title_author()
+#     novel.save()
+#
+# if __name__ == '__main__':
+#     main()

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, flash
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_wtf import FlaskForm
@@ -27,8 +27,14 @@ class NovelForm(FlaskForm):
     author = StringField('author: ')
     submit = SubmitField('download')
 
-def novel_download():
-    Novel().save()
+def novel_download(jsonfile):
+    novel = Novel(jsonfile)
+
+    print(novel.info.get_title())
+    print(novel.info.get_author())
+    print(novel.info.get_url())
+
+    novel.save()
 
 
 def content_fix():
@@ -44,15 +50,20 @@ class SettingForm(FlaskForm):
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    if request.method == 'POST':
-        novel_download()
-        content_fix()
-
     form = NovelForm()
 
     jsonfile = JsonFile()
     name = jsonfile.get_title()
     author = jsonfile.get_author()
+
+    print("index: " + name)
+    print("index: " + author)
+
+    if request.method == 'POST':
+
+        novel_download(jsonfile)
+        content_fix()
+
     return render_template('index.html', form=form, name=name, author=author)
 
 
@@ -69,7 +80,7 @@ def setting():
     url = None
 
     form = SettingForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and request.method == 'POST':
         name = form.name.data
         author = form.author.data
         url = form.url.data
@@ -80,7 +91,9 @@ def setting():
 
         json_setting(name, author, url)
 
+        flash('設定成功!!')
+
     return render_template('setting.html', form=form, name=name, author=author, url=url)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

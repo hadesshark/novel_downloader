@@ -4,6 +4,13 @@
 {% block title %}小說下載器{% endblock %}
 
 {% block page_content %}
+  {% for message in get_flashed_messages() %}
+  <div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+  </div>
+  {% endfor %}
+ 
 <div class="page-header">
     <h1>基本設定</h1>
 </div>
