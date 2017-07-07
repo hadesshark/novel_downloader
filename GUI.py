@@ -6,8 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
 
-from downloader import Novel
-from initialize import JsonFile
+from downloader import Novel, SettingInfo
 from content_fix import Content
 
 app = Flask(__name__)
@@ -15,14 +14,6 @@ app.config['SECRET_KEY'] = 'hard to guess string'
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 manager = Manager(app)
-
-
-def reset_name():
-    return JsonFile().get_title()
-
-
-def reset_author():
-    return JsonFile().get_author()
 
 
 class NovelForm(FlaskForm):
@@ -34,11 +25,6 @@ class NovelForm(FlaskForm):
 
 def novel_download(jsonfile):
     novel = Novel(jsonfile)
-
-    print(novel.info.get_title())
-    print(novel.info.get_author())
-    print(novel.info.get_url())
-
     novel.save()
 
 
@@ -53,7 +39,7 @@ class SettingForm(FlaskForm):
     submit = SubmitField('Save')
 
 
-class JsonFile(JsonFile):
+class JsonFile(SettingInfo):
 
     def get_info(self):
         return (self.get_title(), self.get_author(), self.get_url())
@@ -84,6 +70,7 @@ def index():
 
     data = Data(form, name, author, url)
     return render_template('index.html', data=data)
+
 
 @app.route('/setting', methods=['POST', 'GET'])
 def setting():
