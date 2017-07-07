@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, flash
 from flask_bootstrap import Bootstrap
-from flask_moment import Moment
 from flask_script import Manager
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -12,7 +11,6 @@ from content_fix import Content
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
 bootstrap = Bootstrap(app)
-moment = Moment(app)
 manager = Manager(app)
 
 
