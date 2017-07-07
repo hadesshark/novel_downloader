@@ -64,8 +64,12 @@ class JsonFile(JsonFile):
         self.set_author(author)
 
 
-def data(self, form, name, author, url):
-    return form, name, author, url
+class Data(object):
+    def __init__(self, form, name, author, url):
+        self.form = form
+        self.name = name
+        self.author = author
+        self.url = url
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -78,8 +82,8 @@ def index():
         novel_download(JsonFile())  # 這樣寫不太好，需要改
         content_fix()
 
-    return render_template('index.html', form=form, name=name, author=author, url=url)
-
+    data = Data(form, name, author, url)
+    return render_template('index.html', data=data)
 
 @app.route('/setting', methods=['POST', 'GET'])
 def setting():
@@ -97,7 +101,9 @@ def setting():
 
         flash('設定成功!!')
 
-    return render_template('setting.html', form=form, name=name, author=author, url=url)
+    data = Data(form, name, author, url)
+
+    return render_template('setting.html', data=data)
 
 if __name__ == '__main__':
     manager.run()
