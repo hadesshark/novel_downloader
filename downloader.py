@@ -76,8 +76,8 @@ class Downloader(object):
 
 class Content(object):
 
-    def collect(self):
-        return Downloader().all_chapter()
+    def collect(self, jsonfile=SettingInfo()):
+        return Downloader(jsonfile.get_url()).all_chapter()
 
 
 class Novel(object):
@@ -86,7 +86,7 @@ class Novel(object):
         self.info = base_setting
         self.title = self.info.get_title()
         self.author = self.info.get_author()
-        self.content = Content().collect()
+        self.content = Content().collect(self.info)
 
     def save(self):
         with open(self.save_name_and_address(), 'w', encoding='utf-8') as f:

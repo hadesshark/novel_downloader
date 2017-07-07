@@ -1,6 +1,7 @@
-from flask import Flask, jsonify, render_template, request, flash
+from flask import Flask, render_template, request, flash
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
+from flask_script import Manager
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
@@ -13,6 +14,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
 bootstrap = Bootstrap(app)
 moment = Moment(app)
+manager = Manager(app)
 
 
 def reset_name():
@@ -25,6 +27,7 @@ def reset_author():
 class NovelForm(FlaskForm):
     name = StringField('Title: ')
     author = StringField('author: ')
+    url = StringField('URL: ')
     submit = SubmitField('download')
 
 def novel_download(jsonfile):
@@ -55,6 +58,7 @@ def index():
     jsonfile = JsonFile()
     name = jsonfile.get_title()
     author = jsonfile.get_author()
+    url = jsonfile.get_url()
 
     print("index: " + name)
     print("index: " + author)
@@ -64,7 +68,7 @@ def index():
         novel_download(jsonfile)
         content_fix()
 
-    return render_template('index.html', form=form, name=name, author=author)
+    return render_template('index.html', form=form, name=name, author=author, url=url)
 
 
 def json_setting(name, author, url):
@@ -96,4 +100,4 @@ def setting():
     return render_template('setting.html', form=form, name=name, author=author, url=url)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    manager.run()
