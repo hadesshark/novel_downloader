@@ -53,28 +53,29 @@ class SettingForm(FlaskForm):
     submit = SubmitField('Save')
 
 
-def json_setting(name, author, url):
-    jsonfile = JsonFile()
-    jsonfile.set_title(name)
-    jsonfile.set_url(url)
-    jsonfile.set_author(author)
+class JsonFile(JsonFile):
+
+    def get_info(self):
+        return (self.get_title(), self.get_author(), self.get_url())
+
+    def set_info(self, name, author, url):
+        self.set_title(name)
+        self.set_url(url)
+        self.set_author(author)
+
+
+def data(self, form, name, author, url):
+    return form, name, author, url
 
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
     form = NovelForm()
 
-    jsonfile = JsonFile()
-    name = jsonfile.get_title()
-    author = jsonfile.get_author()
-    url = jsonfile.get_url()
-
-    print("index: " + name)
-    print("index: " + author)
+    name, author, url = JsonFile().get_info()
 
     if request.method == 'POST':
-
-        novel_download(jsonfile)
+        novel_download(JsonFile())  # 這樣寫不太好，需要改
         content_fix()
 
     return render_template('index.html', form=form, name=name, author=author, url=url)
@@ -92,11 +93,7 @@ def setting():
         author = form.author.data
         url = form.url.data
 
-        print(name)
-        print(author)
-        print(url)
-
-        json_setting(name, author, url)
+        JsonFile().set_info(name, author, url)
 
         flash('設定成功!!')
 
