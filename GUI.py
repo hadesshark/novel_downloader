@@ -20,6 +20,7 @@ manager = Manager(app)
 def reset_name():
     return JsonFile().get_title()
 
+
 def reset_author():
     return JsonFile().get_author()
 
@@ -29,6 +30,7 @@ class NovelForm(FlaskForm):
     author = StringField('author: ')
     url = StringField('URL: ')
     submit = SubmitField('download')
+
 
 def novel_download(jsonfile):
     novel = Novel(jsonfile)
@@ -51,6 +53,13 @@ class SettingForm(FlaskForm):
     submit = SubmitField('Save')
 
 
+def json_setting(name, author, url):
+    jsonfile = JsonFile()
+    jsonfile.set_title(name)
+    jsonfile.set_url(url)
+    jsonfile.set_author(author)
+
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
     form = NovelForm()
@@ -70,12 +79,6 @@ def index():
 
     return render_template('index.html', form=form, name=name, author=author, url=url)
 
-
-def json_setting(name, author, url):
-    jsonfile = JsonFile()
-    jsonfile.set_title(name)
-    jsonfile.set_url(url)
-    jsonfile.set_author(author)
 
 @app.route('/setting', methods=['POST', 'GET'])
 def setting():
