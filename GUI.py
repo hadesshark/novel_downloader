@@ -20,7 +20,6 @@ class NovelForm(FlaskForm):
     url = StringField('URL: ')
     submit = SubmitField('download')
 
-
 def novel_download(jsonfile):
     novel = Novel(jsonfile)
     novel.save()
@@ -56,18 +55,26 @@ class Data(object):
         self.url = url
 
 
+def convert():
+    print("成功！！")
+
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    form = NovelForm()
+    download_form = NovelForm()
 
     name, author, url = JsonFile().get_info()
 
     if request.method == 'POST':
-        novel_download(JsonFile())  # 這樣寫不太好，需要改
-        content_fix()
-        flash('下載完成！！')
+        if request.form['submit'] == 'download':
+            novel_download(JsonFile())  # 這樣寫不太好，需要改
+            content_fix()
+            flash('下載完成！！')
+        elif request.form['submit'] == 'convert':
+            convert()
+            flash('轉換成功！！')
 
-    data = Data(form, name, author, url)
+    data = Data(download_form, name, author, url)
     return render_template('index.html', data=data)
 
 
@@ -91,10 +98,6 @@ def setting():
 
     return render_template('setting.html', data=data)
 
-
-@app.route('/convert')
-def convert():
-    print("成功！！")
 
 if __name__ == '__main__':
     manager.run()
