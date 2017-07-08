@@ -15,5 +15,8 @@ manager = Manager(app)
 def index():
     return 'hello, World!'
 
+
+# 成功
+# 但是得強制結束
 if __name__ == '__main__':
     app.run()

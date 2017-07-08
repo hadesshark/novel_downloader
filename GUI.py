@@ -65,6 +65,7 @@ def index():
     if request.method == 'POST':
         novel_download(JsonFile())  # 這樣寫不太好，需要改
         content_fix()
+        flash('下載完成！！')
 
     data = Data(form, name, author, url)
     return render_template('index.html', data=data)
