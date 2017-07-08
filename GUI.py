@@ -91,5 +91,10 @@ def setting():
 
     return render_template('setting.html', data=data)
 
+
+@app.route('/convert')
+def convert():
+    print("成功！！")
+
 if __name__ == '__main__':
     manager.run()

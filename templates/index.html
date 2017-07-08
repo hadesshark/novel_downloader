@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}小說下載器{% endblock %}
+{% block title %}小說處理器{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href='./static/css/index.css'}}>
+{% endblock %}
 
 {% block page_content %}
   {% for message in get_flashed_messages() %}
@@ -11,14 +16,35 @@
   </div>
   {% endfor %}
 
-<div class="page-header">
-    <h1>下載器</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2>下載器</h2>
+        </div>
+        <div class="panel-body">
+          <form class="" action= {{ url_for('index') }} method="POST">
+            {{ data.form.name.label }}<h2>{{ data.name }}</h2></br>
+            {{ data.form.author.label }}<h2>{{ data.author }}</h2></br>
+            {{ data.form.url.label }}<span>{{ data.url }}</span></br>
+            <button type="submit" class="btn btn-primary">Download</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2>簡體轉繁體</h2>
+        </div>
+        <div class="panel-body">
+          <a class="btn btn-primary" href= {{ url_for('convert') }} >轉換</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
-<form method="POST" action="/">
-  {{ data.form.name.label }}<h2>{{ data.name }}</h2></br>
-  {{ data.form.author.label }}<h2>{{ data.author }}</h2></br>
-  {{ data.form.url.label }}<span>{{ data.url }}</span></br>
-  <button type="submit" class="btn btn-primary">Download</button>
-</form>
 
 {% endblock %}
