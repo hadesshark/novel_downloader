@@ -7,6 +7,7 @@ from wtforms.validators import Required
 
 from downloader import Novel, SettingInfo
 from content_fix import Content
+from download_txt import SimpleToTW
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
@@ -56,6 +57,7 @@ class Data(object):
 
 
 def convert():
+    SimpleToTW().update()
     print("成功！！")
 
 

@@ -29,7 +29,7 @@ class SimpleToTW(Content):
         file.close()
 
 
-class Novel(Novel):
+class ContertNovel(Novel):
     def save(self):
         self.set_title(OpenCC('s2tw').convert(self.info.get_title()))
 
@@ -41,7 +41,7 @@ class Novel(Novel):
 
 
 def main():
-    Novel().save()
+    ContertNovel().save()
     SimpleToTW().update()
 
 if __name__ == '__main__':
