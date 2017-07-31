@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash
 from flask_bootstrap import Bootstrap
 from flask_script import Manager
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, RadioField
 from wtforms.validators import Required
 
 from downloader import Novel, SettingInfo
