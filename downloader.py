@@ -102,7 +102,6 @@ class Novel(object):
     def save_name_and_address(self):
         return self.file_address + self.info.__str__()
 
-
 def main():
     """
     novel save -> chapter(string) collect -> from downloader(list) get page
