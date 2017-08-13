@@ -19,6 +19,7 @@ class NovelForm(FlaskForm):
     name = StringField('Title: ')
     author = StringField('author: ')
     url = StringField('URL: ')
+    finish = RadioField('Label', choices=[('yes','已完結'),('no','連載中')])
     submit = SubmitField('download')
 
 def novel_download(jsonfile):
@@ -34,26 +35,29 @@ class SettingForm(FlaskForm):
     name = StringField('Title: ', validators=[Required()])
     author = StringField('Author: ', validators=[])
     url = StringField('URL: ', validators=[Required()])
+    finish = RadioField('Label', choices=[('yes','已完結'),('no','連載中')])
     submit = SubmitField('Save')
 
 
 class JsonFile(SettingInfo):
 
     def get_info(self):
-        return (self.get_title(), self.get_author(), self.get_url())
+        return (self.get_title(), self.get_author(), self.get_url(), self.get_finish())
 
-    def set_info(self, name, author, url):
+    def set_info(self, name, author, url, finish):
         self.set_title(name)
         self.set_url(url)
         self.set_author(author)
+        self.set_finish(finish)
 
 
 class Data(object):
-    def __init__(self, form, name, author, url):
+    def __init__(self, form, name, author, url, finish):
         self.form = form
         self.name = name
         self.author = author
         self.url = url
+        self.finish = finish
 
 
 def convert():
@@ -65,7 +69,7 @@ def convert():
 def index():
     download_form = NovelForm()
 
-    name, author, url = JsonFile().get_info()
+    name, author, url, finish = JsonFile().get_info()
 
     if request.method == 'POST':
         if request.form['submit'] == 'download':
@@ -76,7 +80,7 @@ def index():
             convert()
             flash('轉換成功！！')
 
-    data = Data(download_form, name, author, url)
+    data = Data(download_form, name, author, url, finish)
     return render_template('index.html', data=data)
 
 
@@ -85,18 +89,20 @@ def setting():
     name = None
     author = None
     url = None
+    finish = None
 
     form = SettingForm()
     if form.validate_on_submit() and request.method == 'POST':
         name = form.name.data
         author = form.author.data
         url = form.url.data
+        finish = form.finish.data
 
-        JsonFile().set_info(name, author, url)
+        JsonFile().set_info(name, author, url, finish)
 
         flash('設定成功!!')
 
-    data = Data(form, name, author, url)
+    data = Data(form, name, author, url, finish)
 
     return render_template('setting.html', data=data)
 

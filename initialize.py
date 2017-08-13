@@ -10,6 +10,7 @@ class JsonFile(object):
         self.title = self.json_data.get('title')
         self.url = self.json_data.get('url')
         self.author = self.json_data.get('author')
+        self.finish = self.json_data.get('finish')
 
     def get_title(self):
         return self.title
@@ -29,6 +30,12 @@ class JsonFile(object):
     def set_author(self, author=''):
         self.author = author
 
+    def get_finish(self, finish=''):
+        return self.finish
+
+    def set_finish(self, finish='yes'):
+        self.finish = finish
+
     def __str__(self):
         if len(self.author):
             return ("{0} 作者：{1}.txt").format(self.get_title(), self.get_author())
@@ -36,7 +43,11 @@ class JsonFile(object):
             return ("{0}.txt").format(self.get_title())
 
     def data(self):
-        return [{'title': self.title, 'url': self.url, 'author': self.author}]
+        return [{
+        'title': self.title,
+        'url': self.url,
+        'author': self.author,
+        'finish': self.finish }]
 
     def __del__(self):
         if self.title != self.json_data.get('title'):
