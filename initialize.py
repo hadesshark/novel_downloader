@@ -59,4 +59,4 @@ class JsonFile(object):
     def __del__(self):
         if self.title != self.json_data.get('title'):
             with open("setting.json", mode="w", encoding="utf-8") as json_file:
-                json.dump(self.data(), json_file)
+                json.dump(self.data(), json_file, indent=2)
