@@ -106,6 +106,11 @@ def setting():
 
     return render_template('setting.html', data=data)
 
+@app.route('/list_downloader', methods=['POST,', 'GET'])
+def list_downloader():
+
+    return  render_template('list_downloader.html', data=data)
+
 
 if __name__ == '__main__':
     manager.run()
